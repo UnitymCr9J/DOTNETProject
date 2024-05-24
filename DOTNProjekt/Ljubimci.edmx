@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ZivotinjeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="drzave">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="naziv" Type="nvarchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="macke">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="cijena" Type="float" Nullable="false" />
+          <Property Name="drzava_id" Type="int" />
+        </EntityType>
+        <EntityType Name="psi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="pasmina" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="vrsta" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="cijena" Type="float" Nullable="false" />
+          <Property Name="drzava_id" Type="int" />
+        </EntityType>
+        <Association Name="fk_drzava">
+          <End Role="drzave" Type="Self.drzave" Multiplicity="0..1" />
+          <End Role="psi" Type="Self.psi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="drzave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="psi">
+              <PropertyRef Name="drzava_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_podrijetlo">
+          <End Role="drzave" Type="Self.drzave" Multiplicity="0..1" />
+          <End Role="macke" Type="Self.macke" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="drzave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="macke">
+              <PropertyRef Name="drzava_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ZivotinjeModelStoreContainer">
+          <EntitySet Name="drzave" EntityType="Self.drzave" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="macke" EntityType="Self.macke" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="psi" EntityType="Self.psi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_drzava" Association="Self.fk_drzava">
+            <End Role="drzave" EntitySet="drzave" />
+            <End Role="psi" EntitySet="psi" />
+          </AssociationSet>
+          <AssociationSet Name="fk_podrijetlo" Association="Self.fk_podrijetlo">
+            <End Role="drzave" EntitySet="drzave" />
+            <End Role="macke" EntitySet="macke" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ZivotinjeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="drzave">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="naziv" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="psi" Relationship="Self.fk_drzava" FromRole="drzave" ToRole="psi" />
+          <NavigationProperty Name="macke" Relationship="Self.fk_podrijetlo" FromRole="drzave" ToRole="macke" />
+        </EntityType>
+        <EntityType Name="macke">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cijena" Type="Double" Nullable="false" />
+          <Property Name="drzava_id" Type="Int32" />
+          <NavigationProperty Name="drzave" Relationship="Self.fk_podrijetlo" FromRole="macke" ToRole="drzave" />
+        </EntityType>
+        <EntityType Name="psi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pasmina" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="vrsta" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cijena" Type="Double" Nullable="false" />
+          <Property Name="drzava_id" Type="Int32" />
+          <NavigationProperty Name="drzave" Relationship="Self.fk_drzava" FromRole="psi" ToRole="drzave" />
+        </EntityType>
+        <Association Name="fk_drzava">
+          <End Role="drzave" Type="Self.drzave" Multiplicity="0..1" />
+          <End Role="psi" Type="Self.psi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="drzave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="psi">
+              <PropertyRef Name="drzava_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_podrijetlo">
+          <End Role="drzave" Type="Self.drzave" Multiplicity="0..1" />
+          <End Role="macke" Type="Self.macke" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="drzave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="macke">
+              <PropertyRef Name="drzava_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ZivotinjeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="drzave" EntityType="Self.drzave" />
+          <EntitySet Name="macke" EntityType="Self.macke" />
+          <EntitySet Name="psi" EntityType="Self.psi" />
+          <AssociationSet Name="fk_drzava" Association="Self.fk_drzava">
+            <End Role="drzave" EntitySet="drzave" />
+            <End Role="psi" EntitySet="psi" />
+          </AssociationSet>
+          <AssociationSet Name="fk_podrijetlo" Association="Self.fk_podrijetlo">
+            <End Role="drzave" EntitySet="drzave" />
+            <End Role="macke" EntitySet="macke" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ZivotinjeModelStoreContainer" CdmEntityContainer="ZivotinjeEntities">
+          <EntitySetMapping Name="drzave">
+            <EntityTypeMapping TypeName="ZivotinjeModel.drzave">
+              <MappingFragment StoreEntitySet="drzave">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="naziv" ColumnName="naziv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="macke">
+            <EntityTypeMapping TypeName="ZivotinjeModel.macke">
+              <MappingFragment StoreEntitySet="macke">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ime" ColumnName="ime" />
+                <ScalarProperty Name="cijena" ColumnName="cijena" />
+                <ScalarProperty Name="drzava_id" ColumnName="drzava_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="psi">
+            <EntityTypeMapping TypeName="ZivotinjeModel.psi">
+              <MappingFragment StoreEntitySet="psi">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ime" ColumnName="ime" />
+                <ScalarProperty Name="pasmina" ColumnName="pasmina" />
+                <ScalarProperty Name="vrsta" ColumnName="vrsta" />
+                <ScalarProperty Name="cijena" ColumnName="cijena" />
+                <ScalarProperty Name="drzava_id" ColumnName="drzava_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
